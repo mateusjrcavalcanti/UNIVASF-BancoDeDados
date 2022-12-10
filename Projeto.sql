@@ -1,7 +1,10 @@
+------> APAGANDO TABELA
+DROP TABLE IF EXISTS Cidade;
+DROP TABLE IF EXISTS Categoria;
+
 ------> LIMPANDO O SCHEMA
 DROP SCHEMA IF EXISTS public CASCADE;
 CREATE SCHEMA IF NOT EXISTS public;
-
 
 ------> CRIANDO TABELAS E COLUNAS
 CREATE TABLE "Categoria"
@@ -197,15 +200,6 @@ INSERT INTO "Categoria" (categoria) VALUES ('Chapéu de palha');
 INSERT INTO "Categoria" (categoria) VALUES ('Cinto de couro');
 INSERT INTO "Categoria" (categoria) VALUES ('Gravata');
 INSERT INTO "Categoria" (categoria) VALUES ('Guarda-chuva/Sombrinha');
-INSERT INTO "Categoria" (categoria) VALUES ('Joelheira');
-INSERT INTO "Categoria" (categoria) VALUES ('Joias');
-INSERT INTO "Categoria" (categoria) VALUES ('Lenço');
-INSERT INTO "Categoria" (categoria) VALUES ('Luva');
-INSERT INTO "Categoria" (categoria) VALUES ('Malas');
-INSERT INTO "Categoria" (categoria) VALUES ('Máscara de plástico');
-INSERT INTO "Categoria" (categoria) VALUES ('Óculos (lentes de vidro)');
-INSERT INTO "Categoria" (categoria) VALUES ('Óculos de sol');
-INSERT INTO "Categoria" (categoria) VALUES ('Relógio');
 
 --* Cidades *--
 INSERT INTO "Cidade" (cidade) VALUES ('Petrolina');
@@ -266,20 +260,6 @@ INSERT INTO "Fornecedor" VALUES (DEFAULT, 'John LTDA', 'Av. das nações desunid
 INSERT INTO "Fornecedor" VALUES (DEFAULT, 'BH Imports', 'Rua Dona Celma', 240, 'centro', '56509990', '6564656655', '65465465465465', '+5581855526312', 2, 'johnny');
 
 --* Produtos [ codproduto | descricao | peso | qtdemin | codcategoria | codfornecedor] *--
-
-/*
-	CATEGORIAS SEM PRODUTOS:
-		Joelheira
-		Joias
-		Lenço
-		Luva
-		Malas
-		Máscara de plástico
-		Óculos (lentes de vidro)
-		Óculos de sol
-		Relógio
-*/
-
 INSERT INTO "Produto"  VALUES (DEFAULT, 'Bolsa com detalhe de costura', 1.256, 1, 2, 1);
 INSERT INTO "Produto"  VALUES (DEFAULT, 'Bolsa com alça superior Carta Gráfica Bloco de cores', 1.105, 1, 2, 2);
 INSERT INTO "Produto"  VALUES (DEFAULT, 'EMERY ROSE Mochila Funcional Minimalista Grande capacidade', 1.659, 1, 2, 3);
@@ -303,11 +283,78 @@ INSERT INTO "Produto"  VALUES (DEFAULT, 'Sombrinha Guarda-Chuva Dobrável Semi A
 INSERT INTO "Produto"  VALUES (DEFAULT, 'guarda-chuva dobrável automático com luz led à prova de vento portátil', 1.123, 1, 9, 5);
 
 --* ENTRADA [ codentrada | dataped | dataentr | total | frete | numnf | imposto | codtransportadora | codloja] *--
-INSERT INTO "Entrada"  VALUES (DEFAULT, 'dataped', 'dataentr', 0);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-12-21', '2021-12-28', 0.0, 120.0, 546455467, 250.9, 4, 1);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-11-22', '2022-12-02', 0.0, 111.11, 565446547, 320.7, 3, 2);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-11-23', '2021-12-01', 0.0, 325.25, 545454547, 140.5, 2, 3);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-11-05', '2022-11-22', 0.0, 105.01, 454545457, 256.6, 1, 4);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-11-25', '2021-12-18', 0.0, 92.58, 745454455, 152.8, 4, 1);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-12-18', '2022-12-26', 0.0, 203.50, 454545145, 235.4, 3, 2);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-12-27', '2022-01-17', 0.0, 156.89, 415845454, 655.1, 2, 3);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-12-18', '2022-12-30', 0.0, 65.99, 876537898, 325.2, 1, 4);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-11-29', '2021-12-19', 0.0, 165.89, 454545427, 136.85, 4, 1);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-11-30', '2022-12-27', 0.0, 201.81, 875858757, 236.85, 3, 2);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-11-01', '2021-11-18', 0.0, 235.93, 587587585, 136.87, 2, 3);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-11-19', '2022-10-01', 0.0, 246.52, 785875875, 251.22, 1, 4);
 
---* ITEM ENTRADA
---* SAIDA
---* ITEM SAIDA
+--* ITEM ENTRADA [ coditementrada | lote | qtde | valor | codentrada| codproduto] *--
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '654554659', 10, 132.9, 1, 1);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '546546546', 9, 189.95, 2, 2);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '678687783', 8, 117.99, 3, 3);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '687687687', 7, 69.99, 4, 4);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '687687876', 6, 66.9, 5, 5);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '687687687', 5, 84.99, 6, 6);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '654654654', 6, 102.79, 7, 7);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '367383683', 7, 76.56, 8, 8);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '387383838', 8, 24.9, 9, 9);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '783873873', 9, 50.95, 10, 10);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '873876873', 10, 146.9, 11, 11);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '873878733', 14, 305.9, 12, 12);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '387387873', 13, 99.9, 1, 13);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '326532653', 12, 69, 2, 14);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '638383289', 11, 38.95, 3, 15);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '285639889', 10, 53.95, 4, 16);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '926986298', 9, 189.9, 5, 17);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '629869826', 8, 199.9, 6, 18);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '629683832', 7, 19.9, 7, 19);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '638632838', 6, 75, 8, 20);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '292829892', 5, 152.51, 9, 21);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '654554659', 4, 132.9, 10, 1);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '546546546', 5, 189.95, 11, 2);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '678687783', 6, 117.99, 12, 3);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '687687687', 7, 69.99, 1, 4);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '687687876', 8, 66.9, 2, 5);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '687687687', 9, 84.99, 3, 6);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '654654654', 10, 102.79, 4, 7);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '367383683', 11, 76.56, 5, 8);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '387383838', 12, 24.9, 6, 9);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '783873873', 13, 50.95, 7, 10);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '873876873', 14, 146.9, 8, 11);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '873878733', 13, 305.9, 9, 12);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '387387873', 12, 99.9, 10, 13);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '326532653', 11, 69, 11, 14);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '638383289', 10, 38.95, 12, 15);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '285639889', 9, 53.95, 1, 16);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '926986298', 8, 189.9, 2, 17);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '629869826', 7, 199.9, 3, 18);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '629683832', 6, 19.9, 4, 19);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '638632838', 5, 75, 5, 20);
+INSERT INTO "ItemEntrada"  VALUES (DEFAULT, '292829892', 4, 152.51, 6, 21);
 
-----> REALIZANDO CONSULTAS
-SELECT * FROM "Cidade"
+--* SAIDA [ codsaida | total | frete | imposto | codtransportadora | codloja] *--
+INSERT INTO "Saida"  VALUES (DEFAULT, 0.0, 111.0, 222.9, 4, 1);
+INSERT INTO "Saida"  VALUES (DEFAULT, 0.0, 122.0, 255.8, 2, 2);
+INSERT INTO "Saida"  VALUES (DEFAULT, 0.0, 132.0, 244.7, 2, 3);
+INSERT INTO "Saida"  VALUES (DEFAULT, 0.0, 142.0, 233.6, 1, 4);
+
+--* ITEM SAIDA [ coditemsaida | lote | qtde | valor | codproduto| codsaida] *--
+INSERT INTO "ItemSaida"  VALUES (DEFAULT, '654554659', 10, 132.9, 1, 1);
+INSERT INTO "ItemSaida"  VALUES (DEFAULT, '546546546', 9, 189.95, 2, 2);
+INSERT INTO "ItemSaida"  VALUES (DEFAULT, '678687783', 8, 117.99, 3, 3);
+INSERT INTO "ItemSaida"  VALUES (DEFAULT, '687687687', 7, 69.99, 4, 4);
+
+----> Funções de Conversão (LOWER, UPPER e INITCAP)
+SELECT LOWER(cidade) AS "Lower", UPPER(cidade) AS "Upper", INITCAP(cidade) AS "Initcap"  FROM "Cidade";
+SELECT * FROM "Loja" where lower(nome)=lower('mExIcAnAs');
+
+----> Funções de Manipulação (CONCAT, SUBSTR, LENGTH, INSTR, LPAD)
+SELECT CONCAT(' Fornecedor: ', fornecedor, ' , Contato: ', contato, ', Telefone: ', tel) as Fornecedor FROM "Fornecedor"
