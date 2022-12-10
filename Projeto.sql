@@ -1,9 +1,8 @@
 ------> LIMPANDO O SCHEMA
 DROP SCHEMA IF EXISTS public CASCADE;
-
 CREATE SCHEMA IF NOT EXISTS public;
 
-------> CRIANDO TABELAS E SEUS RELACIONAMENTOS
+------> CRIANDO TABELAS E COLUNAS
 CREATE TABLE IF NOT EXISTS "Categoria"
 (
     codcategoria SERIAL,
@@ -236,7 +235,7 @@ INSERT INTO "Funcionario"  VALUES (DEFAULT, 'Osvaldo', 2);
 INSERT INTO "Funcionario"  VALUES (DEFAULT, 'Margarete', 1);
 INSERT INTO "Funcionario"  VALUES (DEFAULT, 'Judite', 4);
  
---* Funcionarios *--
+--* Relacionamento entre Funcionarios e Departamentos *--
 INSERT INTO "Funcionario_Departamento"  VALUES (1, 1, '2017-05-12');
 INSERT INTO "Funcionario_Departamento"  VALUES (3, 2, '2018-02-12');
 INSERT INTO "Funcionario_Departamento"  VALUES (2, 3, '2019-05-13');
@@ -250,7 +249,15 @@ INSERT INTO "Funcionario_Departamento"  VALUES (6, 2, '2016-09-10');
 INSERT INTO "Funcionario_Departamento"  VALUES (5, 1, '2016-10-11');
 INSERT INTO "Funcionario_Departamento"  VALUES (4, 3, '2016-11-12');
 
+--* Fornecedores *--
+INSERT INTO "Fornecedor" VALUES (DEFAULT, 'Brasilian Imports', 'Rua Dona Celma', 26, 'centro', '56509300', 'Sr. João', '6564656655', '65465465465465', '+5581855526312', 1);
+INSERT INTO "Fornecedor" VALUES (DEFAULT, 'Distribuidora de Acessórios', 'Rua Barão do Mar Azul', 64, 'cohab', '56509300', 'Huan Iang', '6564656655', '65465465465465', '+5581855526312', 2);
+INSERT INTO "Fornecedor" VALUES (DEFAULT, 'Atacadão', 'Rua Antonio barboza', 124, 'areia amarela', '56429300', 'Sr. e Sra. Smith', '6564656655', '65465465465465', '+5581855526312', 1);
+INSERT INTO "Fornecedor" VALUES (DEFAULT, 'Leve Tudo', 'Rua 20', 224, 'henrique café', '56509450', 'Baba Yaga', '6564656655', '65465465465465', '+5581855526312', 2);
+INSERT INTO "Fornecedor" VALUES (DEFAULT, 'China Importados', 'Rua 18', 234, 'idalino souza', '56329300', 'Ana Florinda', '6564656655', '65465465465465', '+5581855526312', 1);
+INSERT INTO "Fornecedor" VALUES (DEFAULT, 'IDistribuidora', 'Rua pão de açucar', 241, 'centro', '56339300', 'Isa newton', '6564656655', '65465465465465', '+5581855526312', 2);
+INSERT INTO "Fornecedor" VALUES (DEFAULT, 'John LTDA', 'Av. das nações desunidas', 248, 'ana auxiliadora', '56509110', 'john wick', '6564656655', '65465465465465', '+5581855526312', 1);
+INSERT INTO "Fornecedor" VALUES (DEFAULT, 'BH Imports', 'Rua Dona Celma', 240, 'centro', '56509990', 'johnny', '6564656655', '65465465465465', '+5581855526312', 2);
+
 ----> REALIZANDO CONSULTAS
 SELECT * FROM "Cidade"
-
-
