@@ -2,6 +2,7 @@
 DROP SCHEMA IF EXISTS public CASCADE;
 CREATE SCHEMA IF NOT EXISTS public;
 
+
 ------> CRIANDO TABELAS E COLUNAS
 CREATE TABLE "Categoria"
 (
@@ -176,11 +177,13 @@ CREATE TABLE "Funcionario_Departamento"
     REFERENCES "Departamento" (coddepartamento) ON DELETE CASCADE
 );
 
+
 ----> EDITANDO TABELAS
 
 --* Coluna de Contato *--
 ALTER TABLE "Transportadora" ADD COLUMN IF NOT EXISTS contato character varying;
 ALTER TABLE "Fornecedor" ADD COLUMN IF NOT EXISTS contato character varying;
+
 
 ----> INSERINDO DADOS
 
@@ -215,7 +218,6 @@ INSERT INTO "Departamento" (departamento) VALUES ('Contabilidade');
 INSERT INTO "Departamento" (departamento) VALUES ('Segurança');
 INSERT INTO "Departamento" (departamento) VALUES ('Diretoria');
 INSERT INTO "Departamento" (departamento) VALUES ('TI');
-
 
 --* Lojas *--
 INSERT INTO "Loja" VALUES (DEFAULT, 'Mexicanas', 'Rua Ana Julia', 20, 'centro', '56302300', '+5581988526312', '6564656655', '65465465465465', 1);
@@ -299,6 +301,13 @@ INSERT INTO "Produto"  VALUES (DEFAULT, 'GRAVATA BUSINESS PREMIUM REGULAR', 0.22
 INSERT INTO "Produto"  VALUES (DEFAULT, 'Gravata Tradicional Luxo Homens Slim Fit.', 0.159, 1, 8, 3);
 INSERT INTO "Produto"  VALUES (DEFAULT, 'Sombrinha Guarda-Chuva Dobrável Semi Automático Masculina Negócios Preto', 0.475, 1, 9, 2);
 INSERT INTO "Produto"  VALUES (DEFAULT, 'guarda-chuva dobrável automático com luz led à prova de vento portátil', 1.123, 1, 9, 5);
+
+--* ENTRADA [ codentrada | dataped | dataentr | total | frete | numnf | imposto | codtransportadora | codloja] *--
+INSERT INTO "Entrada"  VALUES (DEFAULT, 'dataped', 'dataentr', 0);
+
+--* ITEM ENTRADA
+--* SAIDA
+--* ITEM SAIDA
 
 ----> REALIZANDO CONSULTAS
 SELECT * FROM "Cidade"
