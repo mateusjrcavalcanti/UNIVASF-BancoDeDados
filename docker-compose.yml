@@ -25,6 +25,8 @@ services:
       PGADMIN_CONFIG_SERVER_MODE: 'False'
       PGADMIN_CONFIG_PROXY_X_HOST_COUNT: 1
       PGADMIN_CONFIG_PROXY_X_PREFIX_COUNT: 1
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+      
     volumes:
       - pgadmin:/var/lib/pgadmin
       - ./Projeto.sql:/home/pgadmin/Projeto.sql

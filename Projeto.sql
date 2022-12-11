@@ -107,9 +107,9 @@ CREATE TABLE "Entrada"
     "codloja" integer,
     CONSTRAINT "Entrada_pkey" PRIMARY KEY (codentrada),
 	CONSTRAINT "Entrada_codtransportadora_fkey" FOREIGN KEY ("codtransportadora")
-    REFERENCES "Transportadora" (codtransportadora),
+    REFERENCES "Transportadora" (codtransportadora) ON DELETE CASCADE,
     CONSTRAINT "Entrada_codloja_fkey" FOREIGN KEY ("codloja")
-    REFERENCES "Loja" (codloja)
+    REFERENCES "Loja" (codloja) ON DELETE CASCADE
 );
 
 CREATE TABLE "ItemEntrada"
@@ -122,9 +122,9 @@ CREATE TABLE "ItemEntrada"
     "codproduto" integer,
     CONSTRAINT "ItemEntrada_pkey" PRIMARY KEY (coditementrada),
 	CONSTRAINT "ItemEntrada_codentrada_fkey" FOREIGN KEY ("codentrada")
-    REFERENCES "Entrada" (codentrada),
+    REFERENCES "Entrada" (codentrada) ON DELETE CASCADE,
 	CONSTRAINT "ItemEntrada_codproduto_fkey" FOREIGN KEY ("codproduto")
-    REFERENCES "Produto" (codproduto)
+    REFERENCES "Produto" (codproduto) ON DELETE CASCADE
 );
 
 CREATE TABLE "Saida"
@@ -137,9 +137,9 @@ CREATE TABLE "Saida"
     "codloja" integer,
     CONSTRAINT "Saida_pkey" PRIMARY KEY (codsaida),
 	CONSTRAINT "Saida_codtransportadora_fkey" FOREIGN KEY ("codtransportadora")
-    REFERENCES "Transportadora" (codtransportadora),
+    REFERENCES "Transportadora" (codtransportadora) ON DELETE CASCADE,
 	CONSTRAINT "Saida_codloja_fkey" FOREIGN KEY ("codloja")
-    REFERENCES "Loja" (codloja)
+    REFERENCES "Loja" (codloja) ON DELETE CASCADE
 );
 
 CREATE TABLE "ItemSaida"
@@ -152,9 +152,9 @@ CREATE TABLE "ItemSaida"
     "codsaida" integer,
     CONSTRAINT "ItemSaida_pkey" PRIMARY KEY (coditemsaida),
 	CONSTRAINT "ItemSaida_codsaida_fkey" FOREIGN KEY ("codsaida")
-    REFERENCES "Saida" (codsaida),
+    REFERENCES "Saida" (codsaida) ON DELETE CASCADE,
 	CONSTRAINT "ItemSaida_codproduto_fkey" FOREIGN KEY ("codproduto")
-    REFERENCES "Produto" (codproduto)
+    REFERENCES "Produto" (codproduto) ON DELETE CASCADE
 );
 
 CREATE TABLE "Funcionario"
@@ -186,6 +186,25 @@ CREATE TABLE "Funcionario_Departamento"
 --* Coluna de Contato *--
 ALTER TABLE "Transportadora" ADD COLUMN IF NOT EXISTS contato character varying;
 ALTER TABLE "Fornecedor" ADD COLUMN IF NOT EXISTS contato character varying;
+
+----> TRIGGER
+CREATE OR REPLACE FUNCTION calcular_total_entrada() 
+RETURNS trigger AS $calcular_total_entrada$
+BEGIN
+    UPDATE "Entrada" 
+        SET total = (SELECT SUM(valor)
+                         FROM "ItemEntrada"
+                         WHERE codentrada = NEW.codentrada)
+         WHERE codentrada = NEW.codentrada;
+    RETURN NEW;
+END;
+$calcular_total_entrada$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ItemEntrada_added
+  AFTER INSERT
+  ON "ItemEntrada"
+  FOR EACH ROW
+  EXECUTE PROCEDURE calcular_total_entrada();
 
 
 ----> INSERINDO DADOS
@@ -220,10 +239,10 @@ INSERT INTO "Loja" VALUES (DEFAULT, 'Rezende', 'Rua Paulo Plinio', 310, 'cohab',
 INSERT INTO "Loja" VALUES (DEFAULT, 'Casas Amazonas', 'Rua Godoy', 418, 'areia branca', '56302300', '1234567891234', '987654321', '876.87678678687', 1);
 
 --* Transportadoras *--
-INSERT INTO "Transportadora" VALUES (DEFAULT, 'Azul', 'Rua Rio Negro', 206, 'centro',  '56302300', '1234567891234', '987654321', '78678687687676', 2, 'gasparzinho');
-INSERT INTO "Transportadora" VALUES (DEFAULT, 'Amarelo', 'Rua Rio Negro', 386, 'henrique café',  '56302300', '1234567891234', '987654321', '000111000222333555', 2, 'luizinho');
-INSERT INTO "Transportadora" VALUES (DEFAULT, 'Preto', 'Rua Rio Negro', 96, 'castelo branco',  '56302300', '6546546546', '654654656546', '64565654354345', 1, 'pedrindo');
-INSERT INTO "Transportadora" VALUES (DEFAULT, 'Branco', 'Rua Rio Negro', 206, 'vila eduarda',  '56302300', '54654646', '654654654', '5876783873783', 1, 'joaozinho');
+INSERT INTO "Transportadora" VALUES (DEFAULT, 'Azul', 'Rua Rio Negro', 206, 'centro',  '56302300', '1234567891234', '+5587987654321', '78678687687676', 2, 'gasparzinho');
+INSERT INTO "Transportadora" VALUES (DEFAULT, 'Amarelo', 'Rua Rio Negro', 386, 'henrique café',  '56302300', '1234567891234', '+5587987654321', '000111000222333555', 2, 'luizinho');
+INSERT INTO "Transportadora" VALUES (DEFAULT, 'Preto', 'Rua Rio Negro', 96, 'castelo branco',  '56302300', '6546546546', '+5587654656546', '64565654354345', 1, 'pedrindo');
+INSERT INTO "Transportadora" VALUES (DEFAULT, 'Branco', 'Rua Rio Negro', 206, 'vila eduarda',  '56302300', '54654646', '+5587654654654', '5876783873783', 1, 'joaozinho');
  
 --* Funcionarios *--
 INSERT INTO "Funcionario"  VALUES (DEFAULT, 'Fulano de Paula', 1);
@@ -257,7 +276,7 @@ INSERT INTO "Fornecedor" VALUES (DEFAULT, 'Leve Tudo', 'Rua 20', 224, 'henrique 
 INSERT INTO "Fornecedor" VALUES (DEFAULT, 'China Importados', 'Rua 18', 234, 'idalino souza', '56329300', '6564656655', '65465465465465', '+5581855526312', 1, 'Ana Florinda');
 INSERT INTO "Fornecedor" VALUES (DEFAULT, 'IDistribuidora', 'Rua pão de açucar', 241, 'centro', '56339300', '6564656655', '65465465465465', '+5581855526312', 2, 'Isa newton');
 INSERT INTO "Fornecedor" VALUES (DEFAULT, 'John LTDA', 'Av. das nações desunidas', 248, 'ana auxiliadora', '56509110', '6564656655', '65465465465465', '+5581855526312', 1, 'john wick');
-INSERT INTO "Fornecedor" VALUES (DEFAULT, 'BH Imports', 'Rua Dona Celma', 240, 'centro', '56509990', '6564656655', '65465465465465', '+5581855526312', 2, 'johnny');
+INSERT INTO "Fornecedor" VALUES (DEFAULT, 'BH Imports', 'Rua Dona Celma', 240, 'centro', '56509990', '6564656655', '65465465465465', '+5572996526312', 2, 'johnny');
 
 --* Produtos [ codproduto | descricao | peso | qtdemin | codcategoria | codfornecedor] *--
 INSERT INTO "Produto"  VALUES (DEFAULT, 'Bolsa com detalhe de costura', 1.256, 1, 2, 1);
@@ -356,5 +375,37 @@ INSERT INTO "ItemSaida"  VALUES (DEFAULT, '687687687', 7, 69.99, 4, 4);
 SELECT LOWER(cidade) AS "Lower", UPPER(cidade) AS "Upper", INITCAP(cidade) AS "Initcap"  FROM "Cidade";
 SELECT * FROM "Loja" where lower(nome)=lower('mExIcAnAs');
 
-----> Funções de Manipulação (CONCAT, SUBSTR, LENGTH, INSTR, LPAD)
-SELECT CONCAT(' Fornecedor: ', fornecedor, ' , Contato: ', contato, ', Telefone: ', tel) as Fornecedor FROM "Fornecedor"
+----> Funções de Manipulação (CONCAT, SUBSTR, LENGTH, LPAD)
+SELECT CONCAT(' Fornecedor: ', fornecedor, ' , Contato: ', contato, ', Telefone: ', tel) as Fornecedor FROM "Fornecedor";
+SELECT CONCAT(' Fornecedor: ', transportadora, ' , Contato: ', contato, ', Telefone: ', tel) as Transportadora FROM "Transportadora";
+SELECT SUBSTR(tel,0,4) as "código do país", SUBSTR(tel,4,2) as "DDD sem o zero", SUBSTR(tel,6,9) as "DDD sem o zero" FROM "Fornecedor";
+SELECT SUBSTR(tel,0,4) as "código do país", SUBSTR(tel,4,2) as "DDD sem o zero", SUBSTR(tel,6,9) as "DDD sem o zero" FROM "Transportadora";
+SELECT 	tel as "Telefone",
+		CASE WHEN LENGTH(tel)<>14 THEN 'Iválido'
+			ELSE 'Válido'
+		END AS "Válido | Inválido"
+FROM "Fornecedor";
+SELECT 	tel as "Telefone",
+		CASE WHEN LENGTH(tel)<>14 THEN 'Iválido'
+			ELSE 'Válido'
+		END AS "Válido | Inválido"
+FROM "Transportadora";
+SELECT lpad(LOWER(transportadora), 20, '=') AS "Função LPAD" FROM "Transportadora";
+SELECT lpad(LOWER(funcionario), 20, '=') AS "Função LPAD" FROM "Funcionario";
+
+----> Funções de Conjuntos (MAX, MIN, SUM, AVG e COUNT)
+SELECT MAX(imposto) AS "Maior Imposto" FROM "Entrada";
+SELECT MAX(frete) AS "Maior Frete" FROM "Entrada";
+SELECT MIN(imposto) AS "Maior Imposto" FROM "Entrada";
+SELECT MIN(frete) AS "Maior Frete" FROM "Entrada";
+SELECT AVG(frete) from "Entrada" WHERE codtransportadora = 2;
+SELECT AVG(frete) from "Entrada" WHERE codtransportadora = 1;
+SELECT COUNT(*) from "Entrada" WHERE codtransportadora = 2;
+SELECT COUNT(*) from "Entrada" WHERE codtransportadora = 1;
+
+----> DELETE
+DELETE FROM "Saida" WHERE codloja = 1;
+DELETE FROM "Saida" WHERE codloja = 2;
+
+--> UPDATE
+UPDATE "Funcionario" SET funcionario = 'O Tal Fulano' WHERE codfuncionario = 1;
