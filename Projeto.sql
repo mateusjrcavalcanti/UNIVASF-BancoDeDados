@@ -109,7 +109,9 @@ CREATE TABLE "Entrada"
 	CONSTRAINT "Entrada_codtransportadora_fkey" FOREIGN KEY ("codtransportadora")
     REFERENCES "Transportadora" (codtransportadora) ON DELETE CASCADE,
     CONSTRAINT "Entrada_codloja_fkey" FOREIGN KEY ("codloja")
-    REFERENCES "Loja" (codloja) ON DELETE CASCADE
+    REFERENCES "Loja" (codloja) ON DELETE CASCADE,
+	CHECK (dataped <= CURRENT_DATE),
+	CHECK (dataentr <= CURRENT_DATE)
 );
 
 CREATE TABLE "ItemEntrada"
@@ -177,7 +179,8 @@ CREATE TABLE "Funcionario_Departamento"
     FOREIGN KEY (codfuncionario)
     REFERENCES "Funcionario" (codfuncionario) ON DELETE CASCADE,
     FOREIGN KEY (coddepartamento)
-    REFERENCES "Departamento" (coddepartamento) ON DELETE CASCADE
+    REFERENCES "Departamento" (coddepartamento) ON DELETE CASCADE,	
+	CHECK (data <= CURRENT_DATE)
 );
 
 
@@ -302,17 +305,17 @@ INSERT INTO "Produto"  VALUES (DEFAULT, 'Sombrinha Guarda-Chuva Dobrável Semi A
 INSERT INTO "Produto"  VALUES (DEFAULT, 'guarda-chuva dobrável automático com luz led à prova de vento portátil', 1.123, 1, 9, 5);
 
 --* ENTRADA [ codentrada | dataped | dataentr | total | frete | numnf | imposto | codtransportadora | codloja] *--
-INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-12-21', '2021-12-28', 0.0, 120.0, 546455467, 250.9, 4, 1);
-INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-11-22', '2022-12-02', 0.0, 111.11, 565446547, 320.7, 3, 2);
-INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-11-23', '2021-12-01', 0.0, 325.25, 545454547, 140.5, 2, 3);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-12-21', '2021-12-28', 0.0, 120.0, 546455467, 250.9, 1, 1);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-11-22', '2022-12-02', 0.0, 111.11, 565446547, 320.7, 1, 2);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-11-23', '2021-12-01', 0.0, 325.25, 545454547, 140.5, 1, 3);
 INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-11-05', '2022-11-22', 0.0, 105.01, 454545457, 256.6, 1, 4);
-INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-11-25', '2021-12-18', 0.0, 92.58, 745454455, 152.8, 4, 1);
-INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-12-18', '2022-12-26', 0.0, 203.50, 454545145, 235.4, 3, 2);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-11-25', '2021-12-18', 0.0, 92.58, 745454455, 152.8, 3, 1);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-12-01', '2022-12-11', 0.0, 203.50, 454545145, 235.4,2, 2);
 INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-12-27', '2022-01-17', 0.0, 156.89, 415845454, 655.1, 2, 3);
-INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-12-18', '2022-12-30', 0.0, 65.99, 876537898, 325.2, 1, 4);
-INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-11-29', '2021-12-19', 0.0, 165.89, 454545427, 136.85, 4, 1);
-INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-11-30', '2022-12-27', 0.0, 201.81, 875858757, 236.85, 3, 2);
-INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-11-01', '2021-11-18', 0.0, 235.93, 587587585, 136.87, 2, 3);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-12-02', '2022-12-11', 0.0, 65.99, 876537898, 325.2, 3, 4);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-11-09', '2021-12-11', 0.0, 165.89, 454545427, 136.85, 3, 1);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-11-30', '2022-12-11', 0.0, 201.81, 875858757, 236.85, 4, 2);
+INSERT INTO "Entrada"  VALUES (DEFAULT, '2021-11-01', '2021-11-18', 0.0, 235.93, 587587585, 136.87, 3, 3);
 INSERT INTO "Entrada"  VALUES (DEFAULT, '2022-11-19', '2022-10-01', 0.0, 246.52, 785875875, 251.22, 1, 4);
 
 --* ITEM ENTRADA [ coditementrada | lote | qtde | valor | codentrada| codproduto] *--
@@ -409,3 +412,88 @@ DELETE FROM "Saida" WHERE codloja = 2;
 
 --> UPDATE
 UPDATE "Funcionario" SET funcionario = 'O Tal Fulano' WHERE codfuncionario = 1;
+
+--> ORDER BY & SELECT DISTINCT
+SELECT DISTINCT codloja as loja FROM "Funcionario" ORDER BY loja ASC;
+SELECT DISTINCT codtransportadora as transportadora FROM "Entrada" ORDER BY transportadora ASC;
+
+--> SELECT WHERE (BETWEEN, IN, LIKE, IS NULL)
+SELECT * FROM "Entrada" WHERE frete BETWEEN 100.0 AND 200.0;
+SELECT * FROM "Entrada" WHERE imposto BETWEEN 100.0 AND 200.0;
+SELECT * FROM "Funcionario" WHERE codloja IN (2, 4);
+SELECT * FROM "Funcionario" WHERE codloja IN (1, 3);
+SELECT * FROM "Produto" WHERE LOWER(descricao) LIKE LOWER('%bOl%');
+SELECT * FROM "Fornecedor" WHERE LOWER(fornecedor) LIKE LOWER('%iMp%');
+SELECT * FROM "Fornecedor" WHERE contato IS NOT NULL;
+SELECT * FROM "Funcionario" WHERE codloja IS NULL;
+
+--> JOIN
+SELECT
+    entrada.dataped as "Pedido",
+	entrada.dataentr as "Entrega",
+	produto.codproduto as "Código",
+	produto.descricao as "Descrição",
+	produto.peso as "Peso",
+    item.valor as "Valor"
+FROM
+    "Entrada" entrada
+INNER JOIN
+  "ItemEntrada" item
+ON entrada.codentrada = item.codentrada
+INNER JOIN
+  "Produto" produto
+ON produto.codproduto = item.codproduto
+	WHERE entrada.codentrada = 1;
+	
+SELECT
+    funcionario.funcionario as "Funcionário",
+    departamento.departamento as "Departamento",
+    rel.data as "Data",
+    loja.nome as "Loja"
+FROM
+	"Funcionario_Departamento" rel
+INNER JOIN  
+    "Funcionario" funcionario
+ON funcionario.codfuncionario = rel.codfuncionario
+INNER JOIN
+  "Loja" loja
+ON funcionario.codloja = loja.codloja
+INNER JOIN
+  "Departamento" departamento
+ON departamento.coddepartamento = rel.coddepartamento
+	WHERE LOWER(funcionario.funcionario) LIKE LOWER('%marg%')
+	ORDER BY rel.data DESC;
+	
+--> GROUP BY
+SELECT categoria.categoria, COUNT(*) FROM "Produto" AS produto 
+INNER JOIN "Categoria" AS categoria ON produto.codcategoria = categoria.codcategoria    
+GROUP BY produto.codcategoria, categoria.categoria
+ORDER BY categoria.categoria ASC;
+
+SELECT transportadora.transportadora, COUNT(*) FROM "Entrada" AS entrada 
+INNER JOIN "Transportadora" AS transportadora ON entrada.codtransportadora = transportadora.codtransportadora  
+GROUP BY entrada.codtransportadora, transportadora.transportadora
+ORDER BY transportadora.transportadora ASC;
+
+--> HAVING
+SELECT categoria.categoria, COUNT(*) FROM "Produto" AS produto 
+INNER JOIN "Categoria" AS categoria ON produto.codcategoria = categoria.codcategoria    
+GROUP BY produto.codcategoria, categoria.categoria
+HAVING COUNT(*) > 2
+ORDER BY categoria.categoria ASC;
+
+SELECT transportadora.transportadora, COUNT(*) FROM "Entrada" AS entrada 
+INNER JOIN "Transportadora" AS transportadora ON entrada.codtransportadora = transportadora.codtransportadora  
+GROUP BY entrada.codtransportadora, transportadora.transportadora
+HAVING COUNT(*) > 3
+ORDER BY transportadora.transportadora ASC;
+
+--> UNION, UNION ALL, INTERSECT, EXCEPT
+SELECT dataped FROM "Entrada" WHERE dataped < '2022-11-20' UNION SELECT dataped FROM "Entrada" WHERE dataped < '2022-12-20';
+SELECT dataped FROM "Entrada" WHERE dataped > '2022-11-10' UNION SELECT dataped FROM "Entrada" WHERE dataped > '2022-08-20';
+SELECT dataped FROM "Entrada" WHERE dataped > '2022-11-10' UNION ALL SELECT dataped FROM "Entrada" WHERE dataped > '2022-08-20';
+SELECT dataped FROM "Entrada" WHERE dataped < '2022-11-20' UNION ALL SELECT dataped FROM "Entrada" WHERE dataped < '2022-12-20';
+SELECT dataped FROM "Entrada" WHERE dataped > '2022-11-10' INTERSECT SELECT dataped FROM "Entrada" WHERE dataped > '2022-08-20';
+SELECT dataped FROM "Entrada" WHERE dataped < '2022-11-20' INTERSECT SELECT dataped FROM "Entrada" WHERE dataped < '2022-12-20';
+SELECT dataped FROM "Entrada" WHERE dataped > '2022-08-20' EXCEPT SELECT dataped FROM "Entrada" WHERE dataped > '2022-11-10';
+SELECT dataped FROM "Entrada" WHERE dataped < '2022-12-20' EXCEPT SELECT dataped FROM "Entrada" WHERE dataped < '2022-11-20';
