@@ -209,6 +209,18 @@ CREATE TRIGGER ItemEntrada_added
   FOR EACH ROW
   EXECUTE PROCEDURE calcular_total_entrada();
 
+CREATE TRIGGER ItemEntrada_updated
+  AFTER UPDATE
+  ON "ItemEntrada"
+  FOR EACH ROW
+  EXECUTE PROCEDURE calcular_total_entrada();
+
+
+CREATE TRIGGER ItemEntrada_deleted
+  AFTER DELETE
+  ON "ItemEntrada"
+  FOR EACH ROW
+  EXECUTE PROCEDURE calcular_total_entrada();
 
 ----> INSERINDO DADOS
 
