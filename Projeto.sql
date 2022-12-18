@@ -393,8 +393,9 @@ SELECT * FROM "Loja" where lower(nome)=lower('mExIcAnAs');
 ----> Funções de Manipulação (CONCAT, SUBSTR, LENGTH, LPAD)
 SELECT CONCAT(' Fornecedor: ', fornecedor, ' , Contato: ', contato, ', Telefone: ', tel) as Fornecedor FROM "Fornecedor";
 SELECT CONCAT(' Fornecedor: ', transportadora, ' , Contato: ', contato, ', Telefone: ', tel) as Transportadora FROM "Transportadora";
-SELECT SUBSTR(tel,0,4) as "código do país", SUBSTR(tel,4,2) as "DDD sem o zero", SUBSTR(tel,6,9) as "DDD sem o zero" FROM "Fornecedor";
-SELECT SUBSTR(tel,0,4) as "código do país", SUBSTR(tel,4,2) as "DDD sem o zero", SUBSTR(tel,6,9) as "DDD sem o zero" FROM "Transportadora";
+SELECT SUBSTR(tel,0,4) as "código do país", SUBSTR(tel,4,2) as "DDD sem o zero", SUBSTR(tel,6,9) as "Numero" FROM "Fornecedor";
+SELECT SUBSTR(tel,0,4) as "código do país", SUBSTR(tel,4,2) as "DDD sem o zero", SUBSTR(tel,6,9) as "Numero" FROM "Transportadora";
+/*
 SELECT 	tel as "Telefone",
 		CASE WHEN LENGTH(tel)<>14 THEN 'Iválido'
 			ELSE 'Válido'
@@ -509,3 +510,4 @@ SELECT dataped FROM "Entrada" WHERE dataped > '2022-11-10' INTERSECT SELECT data
 SELECT dataped FROM "Entrada" WHERE dataped < '2022-11-20' INTERSECT SELECT dataped FROM "Entrada" WHERE dataped < '2022-12-20';
 SELECT dataped FROM "Entrada" WHERE dataped > '2022-08-20' EXCEPT SELECT dataped FROM "Entrada" WHERE dataped > '2022-11-10';
 SELECT dataped FROM "Entrada" WHERE dataped < '2022-12-20' EXCEPT SELECT dataped FROM "Entrada" WHERE dataped < '2022-11-20';
+*/
